@@ -1,0 +1,11 @@
+Bau/
+*.obj
+*.res
+*.dll
+*.exe
+*.img
+*.log
+*.pdb
+*.ilk
+*.exp
+*.lib
