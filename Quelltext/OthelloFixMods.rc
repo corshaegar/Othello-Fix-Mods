@@ -11,12 +11,12 @@ BEGIN
         BLOCK "040704B0"
         BEGIN
             VALUE "CompanyName",      "corshaegar"
-            VALUE "FileDescription",  "Othello-Mod-Unlock - Othello mit beliebigen Union-Plugins"
+            VALUE "FileDescription",  "Othello-Fix-Mods - Othello mit beliebigen Union-Plugins"
             VALUE "FileVersion",      "1.0.0"
-            VALUE "InternalName",     "OthelloModUnlock"
+            VALUE "InternalName",     "OthelloFixMods"
             VALUE "LegalCopyright",   "(C) 2026 corshaegar - AGPL-3.0-or-later"
-            VALUE "OriginalFilename", "OthelloModUnlock.dll"
-            VALUE "ProductName",      "Othello-Mod-Unlock"
+            VALUE "OriginalFilename", "OthelloFixMods.dll"
+            VALUE "ProductName",      "Othello-Fix-Mods"
             VALUE "ProductVersion",   "1.0.0"
         END
     END

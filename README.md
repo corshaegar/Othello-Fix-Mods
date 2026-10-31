@@ -1,4 +1,4 @@
-# Othello-Mod-Unlock
+# Othello-Fix-Mods
 
 **Eine kleine DLL, mit der sich die Gothic-1-Mod [Othello](https://www.worldofgothic.de/) zusammen mit beliebigen anderen
 Union-Plugins (Mods) spielen lässt.** Othello 4.4.2.1 startet von sich aus nur mit den Plugins, die es selbst kennt – jedes
@@ -8,7 +8,7 @@ schaltet beide Sperren beim Start im Arbeitsspeicher ab. **An den Dateien von Ot
 > *English summary: a small Union plugin that lets the Gothic 1 total conversion "Othello" run together with any other Union
 > plugins. Othello 4.4.2.1 refuses to start when it finds a plugin it does not know ("Remove the following unsupported
 > plugins") and silently patches five engine functions so the game crashes later. This DLL disables both locks in memory at
-> startup; Othello's own files stay untouched. Drop `OthelloModUnlock.dll` into `<Othello>\system\Autorun\`. AGPL-3.0.*
+> startup; Othello's own files stay untouched. Drop `OthelloFixMods.dll` into `<Othello>\system\Autorun\`. AGPL-3.0.*
 
 **Inhalt:** [Wofür](#wofür) · [Installation](#installation) · [Was passiert](#was-die-dll-genau-macht) ·
 [Protokoll](#protokoll) · [Sicherheit](#sicherheit-und-grenzen) · [Selbst bauen](#selbst-bauen) · [Test](#test) ·
@@ -32,7 +32,7 @@ dort steckt dieselbe Freischaltung schon in der Koop-DLL.
 
 ## Installation
 
-1. [Neueste Fassung herunterladen](../../releases) (`OthelloModUnlock.dll`).
+1. [Neueste Fassung herunterladen](../../releases) (`OthelloFixMods.dll`).
 2. Die Datei nach `<Othello-Ordner>\system\Autorun\` legen – dorthin, wo auch die anderen Union-Plugins liegen.
 3. Othello wie gewohnt starten.
 
@@ -64,11 +64,11 @@ stellt sie wieder her, sobald dort `0x5D` auftaucht – die erste Minute alle 0,
 
 ## Protokoll
 
-Erkennt die DLL Othello, legt sie neben sich `system\Autorun\OthelloModUnlock.log` an (bei jedem Start neu). Darin steht,
+Erkennt die DLL Othello, legt sie neben sich `system\Autorun\OthelloFixMods.log` an (bei jedem Start neu). Darin steht,
 was gefunden und geändert wurde:
 
 ```
-Othello-Mod-Unlock 1.0.0 - Start 2026-10-31 11:24:07
+Othello-Fix-Mods 1.0.0 - Start 2026-10-31 11:24:07
 Othello erkannt (beim Laden von OTHELLO_ABI.DLL)
 OTHELLO_ABI.DLL bei 70670000, 3448320 Byte gross
   4C5F9 Pruef-Verteiler (Meldung 'unsupported plugins', 100 Varianten): abgeschaltet
@@ -101,7 +101,7 @@ Gebraucht werden die **Visual Studio Build Tools** mit C++ (x86; getestet mit 20
 .\Werkzeuge\bauen.ps1
 ```
 
-Ergebnis: `Bau\OthelloModUnlock.dll` (32 Bit, statisch gebundene Laufzeit – die DLL hängt an keiner `msvcr`-Datei des
+Ergebnis: `Bau\OthelloFixMods.dll` (32 Bit, statisch gebundene Laufzeit – die DLL hängt an keiner `msvcr`-Datei des
 Spielordners). Die DLL besteht aus einer einzigen Quelldatei und benutzt nur Windows-Aufrufe; das Union-SDK wird **nicht**
 gebraucht.
 

@@ -2,7 +2,7 @@
 //
 // Werkzeuge\abbild.py legt die DLL wie der Lader auf eine Basis (Relocations angewendet) und schreibt sie als
 // "<4 Byte Basis><Abbild>". Dieser Test reserviert genau diese Basis, kopiert das Abbild hinein und laesst
-// ApplySites() aus Quelltext\OthelloModUnlock.cpp darauf laufen - dieselbe Funktion, die spaeter im Spiel arbeitet.
+// ApplySites() aus Quelltext\OthelloFixMods.cpp darauf laufen - dieselbe Funktion, die spaeter im Spiel arbeitet.
 //
 // Aufruf: unlock_test.exe <original.img> [gepatcht.img]
 // Prueft: (1) Original - alle drei Stellen abgeschaltet, Sprungziele der beiden Spruenge unveraendert;
@@ -10,8 +10,8 @@
 //         (3) ein verfaelschtes Muster - nichts geaendert (andere Othello-Fassung bleibt unberuehrt);
 //         (4) falls angegeben: das mit gepatchter VDF ausgelieferte Abbild - "schon abgeschaltet".
 
-#define OMU_TEST
-#include "..\Quelltext\OthelloModUnlock.cpp"
+#define OFM_TEST
+#include "..\Quelltext\OthelloFixMods.cpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -92,8 +92,8 @@ namespace {
         for (int i = 0; i < 3; i++)
             zielVorher[i] = SprungZiel(mem + UnlockSites[i].rva, UnlockSites[i].rva);
 
-        OmuTestReset();
-        const int changed = OmuTestApply(mem, size);
+        OfmTestReset();
+        const int changed = OfmTestApply(mem, size);
         Pruefe(changed == 3, "alle drei Stellen abgeschaltet",
             changed == 3 ? "" : "nur ein Teil - siehe Protokoll unten");
 
@@ -116,10 +116,10 @@ namespace {
         }
 
         printf("2. Dasselbe Abbild noch einmal (schon abgeschaltet)\n");
-        OmuTestReset();
-        const int again = OmuTestApply(mem, size);
+        OfmTestReset();
+        const int again = OfmTestApply(mem, size);
         Pruefe(again == 0, "nichts mehr geaendert");
-        Pruefe(strstr(OmuTestLog(), "schon abgeschaltet") != NULL, "Protokoll meldet 'schon abgeschaltet'");
+        Pruefe(strstr(OfmTestLog(), "schon abgeschaltet") != NULL, "Protokoll meldet 'schon abgeschaltet'");
 
         AbbildFrei(mem);
     }
@@ -133,8 +133,8 @@ namespace {
         // ein Byte der Signatur jeder Stelle verbiegen
         for (int i = 0; i < 3; i++)
             mem[UnlockSites[i].sigRva] ^= 0xFF;
-        OmuTestReset();
-        const int changed = OmuTestApply(mem, size);
+        OfmTestReset();
+        const int changed = OfmTestApply(mem, size);
         Pruefe(changed == 0, "nichts geaendert");
         for (int i = 0; i < 3; i++) {
             const UnlockSite& s = UnlockSites[i];
@@ -143,7 +143,7 @@ namespace {
             was[sizeof(was) - 1] = 0;
             Pruefe(memcmp(mem + s.rva, s.expect, s.size) == 0, was);
         }
-        Pruefe(strstr(OmuTestLog(), "Muster passt nicht") != NULL, "Protokoll meldet 'Muster passt nicht'");
+        Pruefe(strstr(OfmTestLog(), "Muster passt nicht") != NULL, "Protokoll meldet 'Muster passt nicht'");
         AbbildFrei(mem);
     }
 
@@ -156,8 +156,8 @@ namespace {
         BYTE* mem = AbbildLaden(datei, &size);
         if (!mem)
             return;
-        OmuTestReset();
-        const int changed = OmuTestApply(mem, size);
+        OfmTestReset();
+        const int changed = OfmTestApply(mem, size);
         Pruefe(changed == 1, "nur der Pruef-Verteiler wurde noch abgeschaltet");
         Pruefe(memcmp(mem + UnlockSites[0].rva, UnlockSites[0].repl, UnlockSites[0].size) == 0,
             "4C5F9 Pruef-Verteiler steht auf der Ersetzung");
@@ -167,7 +167,7 @@ namespace {
             was[sizeof(was) - 1] = 0;
             Pruefe(memcmp(mem + UnlockSites[i].rva, UnlockSites[i].repl, UnlockSites[i].size) == 0, was);
         }
-        Pruefe(strstr(OmuTestLog(), "schon abgeschaltet") != NULL, "Protokoll meldet 'schon abgeschaltet'");
+        Pruefe(strstr(OfmTestLog(), "schon abgeschaltet") != NULL, "Protokoll meldet 'schon abgeschaltet'");
         AbbildFrei(mem);
     }
 }
@@ -177,7 +177,7 @@ int main(int argc, char** argv) {
         printf("Aufruf: unlock_test.exe <original.img> [gepatcht.img]\n");
         return 2;
     }
-    printf("Othello-Mod-Unlock %s - Test des Patch-Codes\n\n", OMU_VERSION);
+    printf("Othello-Fix-Mods %s - Test des Patch-Codes\n\n", OFM_VERSION);
     TestOriginal(argv[1]);
     printf("\n");
     TestFremdeFassung(argv[1]);
@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
         printf("\n");
         TestGepatchteVdf(argv[2]);
     }
-    printf("\nProtokoll des letzten Laufs:\n%s", OmuTestLog());
+    printf("\nProtokoll des letzten Laufs:\n%s", OfmTestLog());
     printf("\nErgebnis: %d gut, %d Fehler\n", Gut, Fehler);
     return Fehler ? 1 : 0;
 }

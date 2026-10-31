@@ -9,5 +9,5 @@ Erste Fassung. Herausgelöst aus dem [Gothic-I-II-Universal-Coop](https://github
   unsupported plugins“ und die beiden Whitelist-Abfragen der stillen Sabotage.
 - Rückhalt-Faden stellt sabotierte Engine-Bytes wieder her, falls die Muster einer abweichenden Fassung nicht passen.
 - Eigenständig: nur Windows-Aufrufe, kein Union-SDK, statisch gebundene Laufzeit.
-- Protokoll `OthelloModUnlock.log` neben der DLL, nur wenn Othello erkannt wurde.
+- Protokoll `OthelloFixMods.log` neben der DLL, nur wenn Othello erkannt wurde.
 - Test gegen ein Speicherabbild der echten `OTHELLO_ABI.DLL` (18 Prüfungen).

@@ -1,9 +1,9 @@
-﻿param(
+param(
     [switch]$Test,            # zusaetzlich den Test bauen und laufen lassen
     [string]$AbiOriginal = "",   # OTHELLO_ABI.DLL (unveraendert) fuer den Test
     [string]$AbiGepatcht = ""    # OTHELLO_ABI.DLL aus einer gepatchten VDF (freiwillig)
 )
-# Baut OthelloModUnlock.dll (32 Bit, statische Laufzeit - keine msvcr-Abhaengigkeit).
+# Baut OthelloFixMods.dll (32 Bit, statische Laufzeit - keine msvcr-Abhaengigkeit).
 # Braucht die Visual Studio Build Tools (getestet: 2019, v142). Ergebnis in Bau\.
 
 $ErrorActionPreference = 'Stop'
@@ -27,23 +27,23 @@ foreach ($p in @(
 if (-not $vcvars) { throw "vcvars32.bat nicht gefunden - Visual Studio Build Tools (C++, x86) installieren" }
 "Werkzeuge: $vcvars"
 
-$quelle = Join-Path $wurzel 'Quelltext\OthelloModUnlock.cpp'
-$res    = Join-Path $wurzel 'Quelltext\OthelloModUnlock.rc'
+$quelle = Join-Path $wurzel 'Quelltext\OthelloFixMods.cpp'
+$res    = Join-Path $wurzel 'Quelltext\OthelloFixMods.rc'
 
 # /MT: statische Laufzeit, die DLL haengt an keiner msvcr-Datei des Spielordners
 $cl = "cl /nologo /c /O2 /MT /W4 /EHsc /DWIN32 /D_CRT_SECURE_NO_WARNINGS " +
-      "/Fo`"$bau\OthelloModUnlock.obj`" `"$quelle`""
-$rc = "rc /nologo /fo `"$bau\OthelloModUnlock.res`" `"$res`""
+      "/Fo`"$bau\OthelloFixMods.obj`" `"$quelle`""
+$rc = "rc /nologo /fo `"$bau\OthelloFixMods.res`" `"$res`""
 $link = "link /nologo /DLL /SUBSYSTEM:WINDOWS /MACHINE:X86 /OPT:REF /OPT:ICF " +
-        "/OUT:`"$bau\OthelloModUnlock.dll`" `"$bau\OthelloModUnlock.obj`" `"$bau\OthelloModUnlock.res`" kernel32.lib"
+        "/OUT:`"$bau\OthelloFixMods.dll`" `"$bau\OthelloFixMods.obj`" `"$bau\OthelloFixMods.res`" kernel32.lib"
 
-Remove-Item "$bau\OthelloModUnlock.dll" -ErrorAction SilentlyContinue
+Remove-Item "$bau\OthelloFixMods.dll" -ErrorAction SilentlyContinue
 $log = Join-Path $bau 'bau.log'
 cmd /c "(call `"$vcvars`" && $cl && $rc && $link) > `"$log`" 2>&1"
 $ausgabe = if (Test-Path $log) { Get-Content $log } else { @() }
 $ausgabe | Where-Object { $_ -match 'error|warning|fatal' } | ForEach-Object { $_ }
-if (-not (Test-Path "$bau\OthelloModUnlock.dll")) { $ausgabe; throw "Bau fehlgeschlagen (siehe $log)" }
-$dll = Get-Item "$bau\OthelloModUnlock.dll"
+if (-not (Test-Path "$bau\OthelloFixMods.dll")) { $ausgabe; throw "Bau fehlgeschlagen (siehe $log)" }
+$dll = Get-Item "$bau\OthelloFixMods.dll"
 "DLL: $($dll.FullName)  $($dll.Length) Byte  SHA-256 $((Get-FileHash $dll.FullName).Hash.Substring(0,16))"
 
 if (-not $Test) { return }

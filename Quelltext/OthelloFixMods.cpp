@@ -1,4 +1,4 @@
-// Othello-Mod-Unlock - Othello mit beliebigen Union-Plugins (Mods) spielen
+// Othello-Fix-Mods - Othello mit beliebigen Union-Plugins (Mods) spielen
 // Copyright (C) 2026 corshaegar - AGPL-3.0-or-later, siehe LICENSE
 //
 // Othello 4.4.2.1 laesst sich nur mit den Plugins starten, die es selbst kennt. Liegt ein anderes Union-Plugin in
@@ -35,7 +35,7 @@
 #include <string.h>
 #include <wchar.h>
 
-#define OMU_VERSION "1.0.0"
+#define OFM_VERSION "1.0.0"
 
 namespace {
 
@@ -107,8 +107,8 @@ namespace {
         SYSTEMTIME st;
         GetLocalTime(&st);
         char head[200];
-        _snprintf(head, sizeof(head), "Othello-Mod-Unlock %s - Start %04d-%02d-%02d %02d:%02d:%02d\r\n",
-            OMU_VERSION, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+        _snprintf(head, sizeof(head), "Othello-Fix-Mods %s - Start %04d-%02d-%02d %02d:%02d:%02d\r\n",
+            OFM_VERSION, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
         head[sizeof(head) - 1] = 0;
         if (FILE* f = fopen(LogPath, "wb")) {   // je Start neu
             fwrite(head, 1, strlen(head), f);
@@ -312,11 +312,11 @@ namespace {
     }
 }
 
-#ifdef OMU_TEST
+#ifdef OFM_TEST
 // Fuer den Test (Test\unlock_test.cpp bindet diese Datei ein): dieselben Funktionen ohne DllMain
-extern "C" int OmuTestApply(unsigned char* base, unsigned long imageSize) { return ApplySites(base, imageSize); }
-extern "C" const char* OmuTestLog() { return LogBuffer; }
-extern "C" void OmuTestReset() { LogBuffer[0] = 0; UnlockDone = 0; }
+extern "C" int OfmTestApply(unsigned char* base, unsigned long imageSize) { return ApplySites(base, imageSize); }
+extern "C" const char* OfmTestLog() { return LogBuffer; }
+extern "C" void OfmTestReset() { LogBuffer[0] = 0; UnlockDone = 0; }
 #else
 BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID) {
     if (reason == DLL_PROCESS_ATTACH) {
