@@ -1,13 +1,15 @@
-# Änderungen
+# Changes
 
-## 1.0.0 (31.10.2026)
+> *Deutsche Fassung: [CHANGELOG.de.md](CHANGELOG.de.md).*
 
-Erste Fassung. Herausgelöst aus dem [Gothic-I-II-Universal-Coop](https://github.com/corshaegar/Gothic-I-II-Universal-Coop)
-(`OthelloUnlock.cpp`, dort seit Coop-Fassung v79 vom 21.10.2026 in Gebrauch).
+## 1.0.0 (2026-10-31)
 
-- Schaltet Othellos Plugin-Sperre im Arbeitsspeicher ab: den Prüf-Verteiler mit der Meldung „Remove the following
-  unsupported plugins“ und die beiden Whitelist-Abfragen der stillen Sabotage.
-- Rückhalt-Faden stellt sabotierte Engine-Bytes wieder her, falls die Muster einer abweichenden Fassung nicht passen.
-- Eigenständig: nur Windows-Aufrufe, kein Union-SDK, statisch gebundene Laufzeit.
-- Protokoll `OthelloFixMods.log` neben der DLL, nur wenn Othello erkannt wurde.
-- Test gegen ein Speicherabbild der echten `OTHELLO_ABI.DLL` (18 Prüfungen).
+First release, taken out of [Gothic-I-II-Universal-Coop](https://github.com/corshaegar/Gothic-I-II-Universal-Coop), where the
+same code (`OthelloUnlock.cpp`) has been in use since Coop version v79 (2026-10-21).
+
+- Disables Othello's plugin lock in memory: the check dispatcher behind the message "Remove the following unsupported
+  plugins" and the two whitelist checks that trigger the silent sabotage.
+- A background thread restores sabotaged engine bytes in case the patterns of a different Othello version don't match.
+- Standalone: Windows API calls only, no Union SDK, statically linked runtime.
+- Writes the log file `OthelloFixMods.log` next to the DLL, but only when Othello is detected.
+- Tested against a memory image of the real `OTHELLO_ABI.DLL` (18 checks).
